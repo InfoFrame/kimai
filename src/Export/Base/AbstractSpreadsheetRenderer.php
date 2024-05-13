@@ -69,43 +69,43 @@ abstract class AbstractSpreadsheetRenderer
      */
     protected array $columns = [
         'date' => [],
-        'begin' => [],
-        'end' => [],
+        //'begin' => [],
+        //'end' => [],
         'duration' => [],
-        'rate' => [],
-        'rate_internal' => [
-            'label' => 'internalRate', // different translation key
-        ],
+        //'rate' => [],
+        // 'rate_internal' => [
+        //     'label' => 'internalRate', // different translation key
+        // ],
         'user' => [
             'label' => 'name'
         ],
         'username' => [],
-        'accountNumber' => [
-            'label' => 'account_number'
-        ],
+        // 'accountNumber' => [
+        //     'label' => 'account_number'
+        // ],
         'customer' => [],
         'project' => [],
         'activity' => [],
         'description' => [
-            'maxWidth' => 50,
+            'maxWidth' => 255,
             'wrapText' => false,
             'sanitizeDDE' => true,
         ],
-        'exported' => [],
-        'billable' => [],
+        // 'exported' => [],
+        // 'billable' => [],
         'tags' => [],
-        'hourlyRate' => [],
-        'fixedRate' => [],
+        // 'hourlyRate' => [],
+        // 'fixedRate' => [],
         'timesheet-meta' => [],
         'customer-meta' => [],
         'project-meta' => [],
         'activity-meta' => [],
         'user-meta' => [],
         'type' => [],
-        'category' => [],
-        'customer_number' => [],
-        'customer_vat' => [],
-        'order_number' => [],
+        //'category' => [],
+        //'customer_number' => [],
+        //'customer_vat' => [],
+        //'order_number' => [],
     ];
 
     public function __construct(
@@ -204,8 +204,11 @@ abstract class AbstractSpreadsheetRenderer
         if (null === $duration) {
             $duration = 0;
         }
+        $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=%s/%s*24', $duration, $this->durationBase));
+        /*
         $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=%s/%s', $duration, $this->durationBase));
         $sheet->getStyle(CellAddress::fromColumnAndRow($column, $row))->getNumberFormat()->setFormatCode($this->durationFormat);
+        // */
     }
 
     protected function setRateTotal(Worksheet $sheet, int $column, int $row, string $startCoordinate, string $endCoordinate): void
