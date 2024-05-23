@@ -68,40 +68,58 @@ abstract class AbstractSpreadsheetRenderer
      * @var array<string, array>
      */
     protected array $columns = [
-        'date' => [],
-        //'begin' => [],
-        //'end' => [],
-        'duration' => [],
-        //'rate' => [],
-        // 'rate_internal' => [
-        //     'label' => 'internalRate', // different translation key
-        // ],
         'user' => [
-            'label' => 'name'
+           'label' => 'name'
         ],
-        'username' => [],
-        // 'accountNumber' => [
-        //     'label' => 'account_number'
-        // ],
-        'customer' => [],
+        'timesheet-meta' => [],
         'project' => [],
         'activity' => [],
+        'date' => [],
+        'day' => [
+            //'render' =>
+            'label' => 'day'
+        ],
+        'duration' => [],
         'description' => [
             'maxWidth' => 255,
             'wrapText' => false,
             'sanitizeDDE' => true,
         ],
+
+        //'date' => [],
+        //'begin' => [],
+        //'end' => [],
+        //'duration' => [],
+        //'rate' => [],
+        // 'rate_internal' => [
+        //     'label' => 'internalRate', // different translation key
+        // ],
+        //'user' => [
+        //    'label' => 'name'
+        //],
+        //'username' => [],
+        // 'accountNumber' => [
+        //     'label' => 'account_number'
+        // ],
+        // 'customer' => [],
+        // 'project' => [],
+        // 'activity' => [],
+        // 'description' => [
+        //     'maxWidth' => 255,
+        //     'wrapText' => false,
+        //     'sanitizeDDE' => true,
+        // ],
         // 'exported' => [],
         // 'billable' => [],
-        'tags' => [],
+        //'tags' => [],
         // 'hourlyRate' => [],
         // 'fixedRate' => [],
-        'timesheet-meta' => [],
-        'customer-meta' => [],
-        'project-meta' => [],
-        'activity-meta' => [],
-        'user-meta' => [],
-        'type' => [],
+        // 'timesheet-meta' => [],
+        // 'customer-meta' => [],
+        // 'project-meta' => [],
+        // 'activity-meta' => [],
+        // 'user-meta' => [],
+        // 'type' => [],
         //'category' => [],
         //'customer_number' => [],
         //'customer_vat' => [],
@@ -171,6 +189,33 @@ abstract class AbstractSpreadsheetRenderer
         $sheet->getStyle(CellAddress::fromColumnAndRow($column, $row))->getNumberFormat()->setFormatCode(self::TIME_FORMAT);
     }
 
+    protected function setDayOfWeek(Worksheet $sheet, int $column, int $row, ?DateTime $date): void
+    {
+        if (null === $date) {
+            $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), '');
+
+            return;
+        }
+
+        //$days = [ 0 => 'H', 1 => 'K', 2 => 'Sze', 3 => 'Cs', 4 => 'P', 5 => 'Szo', 6 => 'V', ];
+
+        //setlocale(LC_ALL, 'hu_HU');
+        //setlocale(LC_TIME, 'hu_HU');
+        //$dayOfWeek = $date->format('D'); // day of week
+        //$dayOfWeek = $days[$date->format('w')];
+        //$excelDate = $dayOfWeek;
+        $excelDate = Date::PHPToExcel($date);
+        
+        if ($excelDate === false) {
+            $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), $dayOfWeek);
+
+            return;
+        }
+
+        $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), $excelDate);
+        $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=TEXT("%s", "nnn")', $date->format('Y-m-d'))); // 'nnn', mert a 'ddd' nem mukodik magyarul
+    }
+    
     protected function setFormattedDate(Worksheet $sheet, int $column, int $row, ?DateTime $date): void
     {
         if (null === $date) {
@@ -276,6 +321,12 @@ abstract class AbstractSpreadsheetRenderer
         if (isset($columns['duration']) && !isset($columns['duration']['render'])) {
             $columns['duration']['render'] = function (Worksheet $sheet, int $row, int $column, ExportableItem $entity) {
                 $this->setDuration($sheet, $column, $row, $entity->getDuration());
+            };
+        }
+
+        if (isset($columns['day']) && !isset($columns['day']['render'])) {
+            $columns['day']['render'] = function (Worksheet $sheet, int $row, int $column, ExportableItem $entity) {
+                $this->setDayOfWeek($sheet, $column, $row, $entity->getBegin());
             };
         }
 
