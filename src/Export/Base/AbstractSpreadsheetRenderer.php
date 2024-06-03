@@ -69,7 +69,7 @@ abstract class AbstractSpreadsheetRenderer
      */
     protected array $columns = [
         'user' => [
-           'label' => 'name'
+            'label' => 'name'
         ],
         'timesheet-meta' => [],
         'project' => [],
@@ -81,7 +81,7 @@ abstract class AbstractSpreadsheetRenderer
         ],
         'duration' => [],
         'description' => [
-            'maxWidth' => 255,
+            'maxWidth' => 128,
             'wrapText' => false,
             'sanitizeDDE' => true,
         ],
@@ -205,7 +205,7 @@ abstract class AbstractSpreadsheetRenderer
         //$dayOfWeek = $days[$date->format('w')];
         //$excelDate = $dayOfWeek;
         $excelDate = Date::PHPToExcel($date);
-        
+
         if ($excelDate === false) {
             $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), $dayOfWeek);
 
@@ -215,7 +215,7 @@ abstract class AbstractSpreadsheetRenderer
         $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), $excelDate);
         $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=TEXT("%s", "nnn")', $date->format('Y-m-d'))); // 'nnn', mert a 'ddd' nem mukodik magyarul
     }
-    
+
     protected function setFormattedDate(Worksheet $sheet, int $column, int $row, ?DateTime $date): void
     {
         if (null === $date) {
@@ -240,8 +240,7 @@ abstract class AbstractSpreadsheetRenderer
     protected function setDurationTotal(Worksheet $sheet, int $column, int $row, string $startCoordinate, string $endCoordinate): void
     {
         $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=SUBTOTAL(9,%s:%s)', $startCoordinate, $endCoordinate));
-        $style = $sheet->getStyle(CellAddress::fromColumnAndRow($column, $row));
-        $style->getNumberFormat()->setFormatCode($this->durationFormat);
+        // $sheet->getStyle(CellAddress::fromColumnAndRow($column, $row))->getNumberFormat()->setFormatCode($this->durationFormat);
     }
 
     protected function setDuration(Worksheet $sheet, int $column, int $row, ?int $duration): void
@@ -249,7 +248,13 @@ abstract class AbstractSpreadsheetRenderer
         if (null === $duration) {
             $duration = 0;
         }
-        $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=%s/%s*24', $duration, $this->durationBase));
+
+        $decimalMultipliter = 24;
+        if ($this->durationFormat == self::DURATION_DECIMAL) {
+            $decimalMultipliter = 1;
+        }
+
+        $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=%s/%s*%s', $duration, $this->durationBase, $decimalMultipliter));
         /*
         $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), sprintf('=%s/%s', $duration, $this->durationBase));
         $sheet->getStyle(CellAddress::fromColumnAndRow($column, $row))->getNumberFormat()->setFormatCode($this->durationFormat);
