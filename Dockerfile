@@ -13,6 +13,8 @@ ARG COMPOSER_VER="latest"
 ARG KIMAI="main"
 # Timezone for images
 ARG TIMEZONE="Europe/Berlin"
+# Repository of source code
+ARG SOURCE="https://github.com/kimai/kimai.git"
 
 ###########################
 # Shared tools
@@ -23,8 +25,9 @@ FROM alpine:latest AS git-dev
 # pass-through Arguments in every stage. See: https://benkyriakou.com/posts/docker-args-empty
 ARG KIMAI
 ARG TIMEZONE
+ARG SOURCE
 RUN apk add --no-cache git && \
-    git clone --depth 1 --branch ${KIMAI} https://github.com/kimai/kimai.git /opt/kimai
+    git clone --depth 1 --branch ${KIMAI} ${SOURCE} /opt/kimai
 
 # production kimai source
 FROM git-dev AS git-prod
@@ -62,7 +65,12 @@ ENV KIMAI=${KIMAI}
 ENV TIMEZONE=${TIMEZONE}
 RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} > /etc/timezone && \
     mkdir -p /composer  && \
-    chown -R www-data:www-data /composer
+    chown -R www-data:www-data /composer && \
+    echo "Listen 80" > /etc/apache2/ports.conf && \
+    a2enmod rewrite && \
+    touch /use_apache
+
+EXPOSE 80
 
 # copy startup script & DB checking script
 COPY .docker/startup.sh /startup.sh
