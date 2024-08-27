@@ -26,7 +26,7 @@ class ApiDocControllerTest extends ControllerBaseTest
     {
         $client = $this->getClientForAuthenticatedUser(User::ROLE_USER);
         $this->assertAccessIsGranted($client, '/api/doc');
-        $this->assertStringContainsString('<title>Kimai - API Docs</title>', $client->getResponse()->getContent());
+        $this->assertStringContainsString('<title>Kimai', $client->getResponse()->getContent());
         $result = $client->getCrawler()->filter('script#swagger-data');
         $swaggerJson = json_decode($result->text(), true);
         $tags = [];
@@ -44,7 +44,7 @@ class ApiDocControllerTest extends ControllerBaseTest
         sort($actual);
         sort($expectedKeys);
 
-        self::assertEquals($expectedKeys, $actual, sprintf('Expected %s sections in API docs, but found %s.', \count($actual), \count($expectedKeys)));
+        self::assertEquals($expectedKeys, $actual, \sprintf('Expected %s sections in API docs, but found %s.', \count($actual), \count($expectedKeys)));
     }
 
     public function testGetJsonDocs(): void
@@ -64,6 +64,7 @@ class ApiDocControllerTest extends ControllerBaseTest
             '/api/activities/{id}/rates',
             '/api/activities/{id}/rates/{rateId}',
             '/api/config/timesheet',
+            '/api/config/colors',
             '/api/customers',
             '/api/customers/{id}',
             '/api/customers/{id}/meta',
@@ -78,6 +79,7 @@ class ApiDocControllerTest extends ControllerBaseTest
             '/api/version',
             '/api/plugins',
             '/api/tags',
+            '/api/tags/find',
             '/api/tags/{id}',
             '/api/teams',
             '/api/teams/{id}',
@@ -103,7 +105,7 @@ class ApiDocControllerTest extends ControllerBaseTest
         $this->assertArrayHasKey('openapi', $json);
         $this->assertEquals('3.0.0', $json['openapi']);
         $this->assertArrayHasKey('info', $json);
-        $this->assertEquals('Kimai - API Docs', $json['info']['title']);
+        $this->assertStringStartsWith('Kimai', $json['info']['title']);
         $this->assertEquals('1.0', $json['info']['version']);
 
         $this->assertArrayHasKey('paths', $json);

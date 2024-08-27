@@ -18,7 +18,6 @@ use App\Form\Model\DateRange;
 use App\Repository\Query\ActivityQuery;
 use App\Repository\Query\BaseQuery;
 use App\Repository\Query\DateRangeInterface;
-use App\Repository\Query\ProjectQuery;
 use App\Repository\Query\TimesheetQuery;
 use App\Utils\SearchTerm;
 use PHPUnit\Framework\TestCase;
@@ -48,7 +47,7 @@ class BaseQueryTest extends TestCase
         $sut->setPageSize(99);
         $sut->setSearchTerm(new SearchTerm('sdf'));
 
-        $this->resetByFormError($sut, ['order', 'orderBy', 'page', 'pageSize', 'searchTerm']);
+        $this->resetByFormError($sut, ['order', 'orderBy', 'page', 'size', 'searchTerm']);
 
         self::assertEquals(1, $sut->getPage());
         self::assertEquals(50, $sut->getPageSize());
@@ -251,8 +250,14 @@ class BaseQueryTest extends TestCase
         $this->assertEquals([13, 27], $sut->getActivityIds());
     }
 
-    protected function assertCustomer(ProjectQuery $sut): void
+    protected function assertCustomer(BaseQuery $sut): void
     {
+        $this->assertTrue(method_exists($sut, 'getCustomers'));
+        $this->assertTrue(method_exists($sut, 'setCustomers'));
+        $this->assertTrue(method_exists($sut, 'hasCustomers'));
+        $this->assertTrue(method_exists($sut, 'addCustomer'));
+        $this->assertTrue(method_exists($sut, 'getCustomerIds'));
+
         $this->assertEquals([], $sut->getCustomers());
         $this->assertFalse($sut->hasCustomers());
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
   <file source-language="en" target-language="nl" datatype="plaintext" original="email.en.xlf">
     <body>
@@ -30,17 +30,37 @@
         <source>reset.subject</source>
         <target>Reset uw wachtwoord</target>
       </trans-unit>
-      <trans-unit id="G2mhn_2" resname="reset.title">
-        <source>reset.title</source>
-        <target>Dat kan gebeuren …</target>
+      <trans-unit id="G2mhn_2" resname="reset.title" xml:space="preserve">
+        <source>Forgot your password?</source>
+        <target state="translated">Paswoord vergeten?</target>
       </trans-unit>
       <trans-unit id="qbt.84Y" resname="reset.button">
         <source>reset.button</source>
         <target>Reset uw wachtwoord</target>
       </trans-unit>
-      <trans-unit id="rhkMAep" resname="reset.intro">
-        <source>reset.intro</source>
-        <target>… dus u bent uw wachtwoord vergeten? Maakt u zich geen zorgen: Kimai zal u helpen om een nieuwe te maken: </target>
+      <trans-unit id="rhkMAep" resname="reset.intro" xml:space="preserve">
+        <source>Don't worry, Kimai will help you create a new one!</source>
+        <target state="translated">Maakt u zich geen zorgen, Kimai zal u helpen om er een nieuw te maken!</target>
+      </trans-unit>
+      <trans-unit id="yohIAA_" resname="absence_created_supervisor_subject" xml:space="preserve">
+        <source>absence_created_supervisor_subject</source>
+        <target state="translated">Nieuwe afwezigheid | %absence_user% | %absence_type%</target>
+      </trans-unit>
+      <trans-unit id="wwLx._J" resname="absence_created_supervisor_message" xml:space="preserve">
+        <source>A new absence was created for %absence_user%.
+
+%absence_type% - %absence_comment%
+
+%absence_list%
+
+Please review them at: %approval_url%</source>
+        <target state="translated">Er is een nieuwe afwezigheid aangemaakt voor %absence_user%.
+
+%absence_type% - %absence_comment%
+
+%absence_list%
+
+Bekijk ze op: %approval_url%</target>
       </trans-unit>
     </body>
   </file>

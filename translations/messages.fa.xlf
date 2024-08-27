@@ -82,9 +82,6 @@
         <source>sum.total</source>
         <target>جمع</target>
       </trans-unit>
-      <!--
-              Login / Security
-            -->
       <trans-unit id="XohImNo" resname="password">
         <source>password</source>
         <target state="translated">رمزعبور</target>
@@ -113,9 +110,6 @@
         <source>login_required</source>
         <target state="translated">مجوز از دست رفته است. تغییر مسیر برای ورود به سیستم؟</target>
       </trans-unit>
-      <!--
-              Menu / Navbar items
-            -->
       <trans-unit id="UoOv6mx" resname="menu.homepage">
         <source>menu.homepage</source>
         <target>داشبرد</target>
@@ -1399,6 +1393,18 @@
       <trans-unit id="UI6nPeP" resname="invoice_number_generator">
         <source>invoice_number_generator</source>
         <target state="translated">مولد شماره فاکتور</target>
+      </trans-unit>
+      <trans-unit id="op76XPd" resname="search_filter" xml:space="preserve">
+        <source>Search filter</source>
+        <target state="translated">فیلتر جستجو</target>
+      </trans-unit>
+      <trans-unit id="rkCw7Ml" resname="last_usage" xml:space="preserve">
+        <source>Last usage</source>
+        <target state="translated">آخرین استفاده</target>
+      </trans-unit>
+      <trans-unit id="q4ooRfF" resname="expires" xml:space="preserve">
+        <source>Expiry date</source>
+        <target state="translated">تاریخ انقضا</target>
       </trans-unit>
     </body>
   </file>
