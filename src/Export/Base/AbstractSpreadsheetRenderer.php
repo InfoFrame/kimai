@@ -79,9 +79,12 @@ abstract class AbstractSpreadsheetRenderer
         'date' => [],
         'day' => [
             //'render' =>
-            'label' => 'day'
+            'label' => 'Nap'
         ],
-        'duration' => [],
+        'duration' => [
+            //'render' =>
+            'label' => 'Munkaóra'
+        ],
         'description' => [
             'maxWidth' => 128,
             'wrapText' => false,
@@ -412,6 +415,7 @@ abstract class AbstractSpreadsheetRenderer
                     $project = $entity->getProject()->getName();
                 }
                 $sheet->setCellValue(CellAddress::fromColumnAndRow($column, $row), $project);
+                $sheet->getColumnDimension('C')->setWidth(0);
             };
         }
 
@@ -426,7 +430,10 @@ abstract class AbstractSpreadsheetRenderer
         }
 
         if (isset($columns['description']) && !isset($columns['description']['render'])) {
+            /*
             $maxWidth = \array_key_exists('maxWidth', $columns['description']) && is_numeric($columns['description']['maxWidth']) ? (int) $columns['description']['maxWidth'] : null;
+            // */
+            $maxWidth = 70;
             $wrapText = \array_key_exists('wrapText', $columns['description']) ? (bool) $columns['description']['wrapText'] : false;
             $sanitizeText = \array_key_exists('sanitizeDDE', $columns['description']) ? (bool) $columns['description']['sanitizeDDE'] : true;
 
